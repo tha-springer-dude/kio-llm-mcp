@@ -35,7 +35,15 @@ function my_category_search_register() {
                     'results' => array(
                         'type'  => 'array',
                         'items' => array(
-                            'type' => 'string',
+                            'type'       => 'object',
+                            'properties' => array(
+                                'id' => array(
+                                    'type' => 'integer',
+                                ),
+                                'name' => array(
+                                    'type' => 'string',
+                                ),
+                            ),
                         ),
                     ),
                 ),
@@ -62,7 +70,10 @@ function my_custom_category_search( $input ) {
     foreach ( $categories as $category ) {
 
         if ( stripos( $category->name, $input['search'] ) !== false ) {
-            $results[] = $category->name;
+            $results[] = array(
+                'id'   => $category->term_id,
+                'name' => $category->name,
+            );
         }
     }
 
