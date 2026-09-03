@@ -23,8 +23,15 @@ function my_post_update_register() {
                     'content' => array(
                         'type' => 'string',
                     ),
+                    'status' => array(
+                        'type' => 'string',
+                        'enum' => array(
+                            'publish',
+                            'draft',
+                        ),
+                    ),
                 ),
-                'required' => array( 'post_id', 'content' ),
+                'required' => array( 'post_id'),
             ),
 
             'output_schema' => array(
@@ -65,19 +72,24 @@ function my_custom_update_post( $input ) {
         );
     }
 
-    $updated = wp_update_post(
-        array(
-            'ID'           => $input['post_id'],
-            'post_content' => $input['content'],
-        ),
-        true
-    );
+ $update_data = array(
+    'ID' => $input['post_id'],
+);
 
-    if ( is_wp_error( $updated ) ) {
-        return array(
-            'error' => $updated->get_error_message(),
-        );
-    }
+if ( isset( $input['content'] ) ) {
+    $update_data['post_content'] = $input['content'];
+}
+
+if ( isset( $input['status'] ) ) {
+    $update_data['post_status'] = $input['status'];
+}
+$updated = wp_update_post( $update_data, true );
+
+if ( is_wp_error( $updated ) ) {
+    return array(
+        'error' => $updated->get_error_message(),
+    );
+}
 
     return array(
         'id'     => $updated,

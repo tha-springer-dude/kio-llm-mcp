@@ -13,3 +13,4 @@ require_once __DIR__ . '/custom_mcp_functions/get-post.php';
 require_once __DIR__ . '/custom_mcp_functions/update-post.php';
 require_once __DIR__ . '/custom_mcp_functions/create-post.php';
 require_once __DIR__ . '/custom_mcp_functions/search-media.php';
+require_once __DIR__ . '/custom_mcp_functions/delete-post.php';

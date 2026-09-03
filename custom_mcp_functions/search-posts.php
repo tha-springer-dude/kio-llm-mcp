@@ -20,8 +20,15 @@ function my_post_search_register() {
                     'search' => array(
                         'type' => 'string',
                     ),
+                    'status' => array(
+                        'type' => 'string',
+                        'enum' => array(
+                            'publish',
+                            'draft',
+                            'any',
+                        ),
+                    ),
                 ),
-                'required' => array( 'search' ),
             ),
 
             'output_schema' => array(
@@ -59,22 +66,30 @@ function my_custom_post_search_permission() {
 
 function my_custom_post_search( $input ) {
 
-    $posts = get_posts(
-        array(
-            'post_type'      => 'post',
-            'post_status'    => 'publish',
-            's'              => $input['search'],
-            'posts_per_page' => -1,
-        )
+    $args = array(
+        'post_type'      => 'post',
+        'posts_per_page' => -1,
     );
+
+    if ( ! empty( $input['search'] ) ) {
+        $args['s'] = $input['search'];
+    }
+
+    if ( ! empty( $input['status'] ) ) {
+        $args['post_status'] = $input['status'];
+    } else {
+        $args['post_status'] = 'publish';
+    }
+
+    $posts = get_posts( $args );
 
     $results = array();
 
     foreach ( $posts as $post ) {
-    $results[] = array(
-        'id'    => $post->ID,
-        'title' => $post->post_title,
-    );
+        $results[] = array(
+            'id'    => $post->ID,
+            'title' => $post->post_title,
+        );
     }
 
     return array(
