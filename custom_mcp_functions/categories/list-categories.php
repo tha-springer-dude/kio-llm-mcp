@@ -1,32 +1,27 @@
 <?php
 /**
- * KIO MCP – Search Categories
+ * KIO MCP – List Categories
  *
- * Registers an MCP ability for searching WordPress categories.
+ * Registers an MCP ability for listing WordPress categories.
  */
 
-add_action( 'wp_abilities_api_init', 'my_category_search_register' );
+add_action( 'wp_abilities_api_init', 'my_category_list_register' );
 
-function my_category_search_register() {
+function my_category_list_register() {
 
     wp_register_ability(
-        'mykiomcp/search-categories',
+        'mykiomcp/list-categories',
         array(
-            'label'       => 'Custom Search Categories',
-            'description' => 'Custom searches WordPress categories by name.',
+            'label'       => 'List Categories',
+            'description' => 'Lists all WordPress categories.',
             'category'    => 'site',
 
-            'execute_callback'    => 'my_custom_category_search',
-            'permission_callback' => 'my_custom_category_search_permission',
+            'execute_callback'    => 'my_custom_category_list',
+            'permission_callback' => 'my_custom_category_list_permission',
 
             'input_schema' => array(
                 'type'       => 'object',
-                'properties' => array(
-                    'search' => array(
-                        'type' => 'string',
-                    ),
-                ),
-                'required' => array( 'search' ),
+                'properties' => array(),
             ),
 
             'output_schema' => array(
@@ -58,23 +53,21 @@ function my_category_search_register() {
     );
 }
 
-function my_custom_category_search_permission() {
+function my_custom_category_list_permission() {
     return current_user_can( 'read' );
 }
 
-function my_custom_category_search( $input ) {
+function my_custom_category_list() {
 
     $categories = get_categories();
-    $results   = array();
+    $results    = array();
 
     foreach ( $categories as $category ) {
 
-        if ( stripos( $category->name, $input['search'] ) !== false ) {
-            $results[] = array(
-                'id'   => $category->term_id,
-                'name' => $category->name,
-            );
-        }
+        $results[] = array(
+            'id'   => $category->term_id,
+            'name' => $category->name,
+        );
     }
 
     return array(

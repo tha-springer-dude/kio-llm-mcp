@@ -8,7 +8,7 @@ function my_post_search_register() {
         'mykiomcp/search-posts',
         array(
             'label'       => 'Custom Search Posts',
-            'description' => 'Custom searches WordPress posts by title.',
+            'description' => 'Searches WordPress posts by text, category, and status.',
             'category'    => 'site',
 
             'execute_callback'    => 'my_custom_post_search',
@@ -19,6 +19,9 @@ function my_post_search_register() {
                 'properties' => array(
                     'search' => array(
                         'type' => 'string',
+                    ),
+                    'id' => array(
+                        'type' => 'integer',
                     ),
                     'status' => array(
                         'type' => 'string',
@@ -70,6 +73,10 @@ function my_custom_post_search( $input ) {
         'post_type'      => 'post',
         'posts_per_page' => -1,
     );
+
+    if ( ! empty( $input['id'] ) ) {
+        $args['p'] = $input['id'];
+    }
 
     if ( ! empty( $input['search'] ) ) {
         $args['s'] = $input['search'];
