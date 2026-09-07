@@ -11,8 +11,8 @@ function my_post_update_register() {
             'description' => 'Updates the content of an existing WordPress post.',
             'category'    => 'site',
 
-            'execute_callback'    => 'my_custom_update_post',
-            'permission_callback' => 'my_custom_update_post_permission',
+            'execute_callback'    => 'kio_mcp_update_post',
+            'permission_callback' => 'kio_mcp_update_post_permission',
 
             'input_schema' => array(
                 'type'       => 'object',
@@ -58,11 +58,11 @@ function my_post_update_register() {
     );
 }
 
-function my_custom_update_post_permission() {
-    return current_user_can( 'edit_posts' );
+function kio_mcp_update_post_permission( $input) {
+    return current_user_can( 'edit_post', $input['post_id'] );
 }
 
-function my_custom_update_post( $input ) {
+function kio_mcp_update_post( $input ) {
 
     $post = get_post( $input['post_id'] );
 

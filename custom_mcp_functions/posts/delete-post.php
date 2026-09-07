@@ -7,12 +7,12 @@ function my_post_delete_register() {
     wp_register_ability(
         'mykiomcp/delete-post',
         array(
-            'label'       => 'Custom Delete Post',
+            'label'       => 'Delete Post',
             'description' => 'Permanently deletes an existing WordPress post.',
             'category'    => 'site',
 
-            'execute_callback'    => 'my_custom_delete_post',
-            'permission_callback' => 'my_custom_delete_post_permission',
+            'execute_callback'    => 'kio_mcp_delete_post',
+            'permission_callback' => 'kio_mcp_delete_post_permission',
 
             'input_schema' => array(
                 'type'       => 'object',
@@ -45,11 +45,11 @@ function my_post_delete_register() {
     );
 }
 
-function my_custom_delete_post_permission() {
+function kio_mcp_delete_post_permission() {
     return current_user_can( 'delete_posts' );
 }
 
-function my_custom_delete_post( $input ) {
+function kio_mcp_delete_post( $input ) {
 
     $post = get_post( $input['post_id'] );
 

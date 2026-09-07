@@ -7,7 +7,7 @@ function my_post_create_register() {
     wp_register_ability(
         'mykiomcp/create-post',
         array(
-            'label'       => 'Custom Create Post',
+            'label'       => 'Create Post',
             'description' => 'Creates a new WordPress post.',
             'category'    => 'site',
 
